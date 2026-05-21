@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grabar — Ukrainian Artists</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Josefin+Sans:wght@200;300;400&family=Italiana&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper: #F5E8DA;
+  --paper-warm: #F1E0CE;
+  --paper-deep: #E8D4BD;
+  --cream: #F9EFE2;
+  --ivory: #FBF2E6;
+  --ink: #2A1648;
+  --ink-light: #3D2870;
+  --ink-muted: #7C6FA0;
+  --ink-soft: #A89EC0;
+  --gold: #5D2EC8;        /* electric violet — primary accent (father) */
+  --gold-deep: #4A1FA8;
+  --rust: #8B4A2A;
+  --vivid: #E5267E;       /* hot magenta — secondary accent (son) */
+  --line: rgba(42,22,72,0.14);
+  --line-soft: rgba(42,22,72,0.06);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --display: 'Italiana', 'Cormorant Garamond', serif;
+  --sans: 'Josefin Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+/* ── PAPER TEXTURE BACKGROUND ── */
+body {
+  font-family: var(--serif);
+  background-color: var(--ivory);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(93,46,200,0.06), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(229,38,126,0.05), transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.1 0 0 0 0 0.2 0 0 0 0.1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+  background-attachment: fixed;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--ink);
+  color: rgba(255,255,255,0.7);
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.55rem 2rem;
+  position: relative;
+}
+.topbar::before, .topbar::after {
+  content: '✦';
+  font-size: 0.5rem;
+  color: var(--gold);
+  letter-spacing: normal;
+}
+.topbar a { color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.2s; }
+.topbar a:hover { color: var(--gold); }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(251,242,230,0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem; height: 76px;
+}
+nav::after {
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 1px; background: var(--line-soft);
+}
+.nav-logo {
+  font-family: var(--display); font-size: 1.65rem; font-weight: 400;
+  letter-spacing: 0.14em; color: var(--ink);
+  text-decoration: none; cursor: pointer; display: flex; align-items: baseline; gap: 0.5rem;
+}
+.nav-logo small {
+  font-family: var(--serif); font-style: italic; font-size: 0.75rem;
+  color: var(--ink-soft); font-weight: 400; letter-spacing: 0.04em;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: var(--sans); font-size: 0.62rem; font-weight: 300;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-muted);
+  text-decoration: none; cursor: pointer; transition: color 0.2s;
+  position: relative; padding: 0.5rem 0;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; height: 1px;
+  background: var(--gold); width: 0; transition: width 0.3s, left 0.3s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; left: 0; }
+
+/* ── PAGES ── */
+.page { display: none; min-height: 80vh; }
+.page.active { display: block; }
+
+/* ── ORNAMENTAL DIVIDER ── */
+.ornament {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.2rem; padding: 2rem 0; color: var(--gold);
+}
+.ornament::before, .ornament::after {
+  content: ''; flex: 1; max-width: 60px; height: 0.5px; background: var(--gold); opacity: 0.5;
+}
+.ornament-mark {
+  font-family: var(--display); font-size: 1.4rem; color: var(--gold);
+  line-height: 1;
+}
+
+/* ── HOME HERO ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 110px);
+  border-bottom: 0.5px solid var(--line);
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 2rem;
+  border: 0.5px solid var(--line);
+  pointer-events: none; z-index: 1;
+}
+.hero-half {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 5rem 4.5rem;
+  position: relative; cursor: pointer; overflow: hidden;
+  z-index: 2;
+  transition: background-color 0.4s;
+}
+.hero-half.left {
+  background: var(--paper-warm);
+  border-right: 0.5px solid var(--line);
+}
+.hero-half.right {
+  background: var(--ivory);
+}
+.hero-half:hover { background-color: rgba(93,46,200,0.04); }
+.hero-half.right:hover { background-color: rgba(229,38,126,0.04); }
+
+.hero-bg-letter {
+  position: absolute; top: -0.2em; right: -0.15em;
+  font-family: var(--display); font-size: clamp(15rem, 28vw, 24rem);
+  font-weight: 400; line-height: 1; color: rgba(42,22,72,0.05);
+  pointer-events: none; user-select: none;
+}
+.hero-half.right .hero-bg-letter { color: rgba(229,38,126,0.08); }
+
+.hero-num {
+  font-family: var(--display); font-size: 0.85rem;
+  color: var(--gold); letter-spacing: 0.4em; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.hero-num::after { content: ''; width: 1.5rem; height: 0.5px; background: var(--gold); }
+.hero-half.right .hero-num { color: var(--vivid); }
+.hero-half.right .hero-num::after { background: var(--vivid); }
+
+.hero-tag {
+  font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1rem;
+}
+
+.hero-name {
+  font-family: var(--display); font-size: clamp(2.8rem, 5vw, 4rem);
+  font-weight: 400; color: var(--ink); margin-bottom: 0.5rem;
+  letter-spacing: 0.02em; line-height: 1.05;
+}
+
+.hero-sub {
+  font-family: var(--serif); font-style: italic; font-size: 1.05rem;
+  color: var(--ink-muted); margin-bottom: 2rem;
+}
+.hero-sub::before { content: '— '; color: var(--gold); }
+
+.hero-desc {
+  font-family: var(--serif); font-size: 1rem; color: var(--ink-light);
+  line-height: 1.85; max-width: 320px; margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ink); background: transparent;
+  border: none; padding: 0.9rem 0 0.9rem 0;
+  cursor: pointer; transition: all 0.3s; width: fit-content;
+  position: relative;
+}
+.hero-btn::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 0.5px; background: var(--ink); transition: background 0.3s;
+}
+.hero-btn::after { content: '→'; transition: transform 0.3s; }
+.hero-btn:hover::after { transform: translateX(4px); }
+.hero-half.right .hero-btn { color: var(--vivid); }
+.hero-half.right .hero-btn::before { background: var(--vivid); }
+
+/* Year badge floating corner */
+.year-badge {
+  position: absolute; top: 5rem; left: 4.5rem;
+  font-family: var(--display); color: var(--gold-deep);
+  font-size: 0.85rem; letter-spacing: 0.3em;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  opacity: 0.7;
+}
+.hero-half.right .year-badge { color: var(--vivid); right: 4.5rem; left: auto; }
+
+/* ── HOME STATS ── */
+.home-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-bottom: 0.5px solid var(--line);
+  background: var(--cream);
+  position: relative;
+}
+.stat {
+  padding: 2.5rem 3rem;
+  border-right: 0.5px solid var(--line);
+  position: relative;
+}
+.stat:last-child { border-right: none; }
+.stat-num-wrap { display: flex; align-items: baseline; gap: 0.5rem; }
+.stat-num {
+  font-family: var(--display); font-size: 3rem; font-weight: 400;
+  color: var(--ink); line-height: 1;
+}
+.stat-num-suffix {
+  font-family: var(--serif); font-style: italic; font-size: 1rem;
+  color: var(--gold);
+}
+.stat-label {
+  font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--ink-muted); margin-top: 0.6rem;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  padding: 4.5rem 4rem 3rem;
+  border-bottom: 0.5px solid var(--line);
+  position: relative;
+}
+.section-header::after {
+  content: ''; position: absolute; bottom: -1px; left: 4rem;
+  width: 3rem; height: 1.5px; background: var(--gold);
+}
+.section-num {
+  font-family: var(--display); font-size: 0.85rem;
+  color: var(--gold); letter-spacing: 0.35em; margin-bottom: 0.5rem;
+}
+.section-tag {
+  font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.8rem;
+}
+.section-title {
+  font-family: var(--display); font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-weight: 400; color: var(--ink); line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+.section-title em { font-style: italic; color: var(--ink-muted); font-family: var(--serif); }
+
+/* ── GALLERY ── */
+.gallery-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 4rem; border-bottom: 0.5px solid var(--line);
+  background: var(--cream);
+}
+.filter-group { display: flex; gap: 0.5rem; }
+.filter-btn {
+  font-family: var(--sans); font-size: 0.58rem; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-muted); background: transparent;
+  border: 0.5px solid var(--line); padding: 0.5rem 1.1rem;
+  cursor: pointer; transition: all 0.25s;
+}
+.filter-btn:hover { color: var(--ink); border-color: var(--ink); }
+.filter-btn.active { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
+.gallery-count {
+  font-family: var(--serif); font-style: italic; font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.gallery-grid {
+  padding: 3.5rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem 2rem;
+}
+
+.painting-card { cursor: pointer; }
+.painting-card:hover .painting-frame { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(42,22,72,0.14); }
+.painting-card:hover .painting-frame::before { opacity: 1; }
+
+.painting-frame {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--paper-deep);
+  padding: 12px;
+  position: relative;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 2px 12px rgba(42,22,72,0.08);
+}
+.painting-frame::before {
+  content: ''; position: absolute; inset: 6px;
+  border: 0.5px solid rgba(42,22,72,0.22);
+  opacity: 0.5; transition: opacity 0.3s;
+  pointer-events: none; z-index: 2;
+}
+.painting-img-wrap {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: var(--cream);
+}
+.painting-img-wrap svg, .painting-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.painting-artist-badge {
+  position: absolute; top: 0.6rem; left: 0.6rem;
+  font-family: var(--sans); font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase;
+  background: rgba(251,242,230,0.95); color: var(--ink);
+  padding: 0.3rem 0.7rem; z-index: 3;
+}
+
+.painting-info { padding: 1.1rem 0.2rem 0; }
+.painting-title-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1rem; margin-bottom: 0.3rem;
+}
+.painting-title {
+  font-family: var(--display); font-size: 1.15rem;
+  color: var(--ink); line-height: 1.3;
+}
+.painting-year {
+  font-family: var(--serif); font-size: 0.85rem; font-style: italic;
+  color: var(--ink-muted); flex-shrink: 0; padding-top: 4px;
+}
+.painting-meta {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+.painting-inquire {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--gold);
+  cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: gap 0.2s, color 0.2s;
+}
+.painting-inquire:hover { gap: 0.7rem; color: var(--gold-deep); }
+
+/* ── DETAIL PAGE ── */
+.detail-layout {
+  display: grid; grid-template-columns: 1fr 440px;
+  border-bottom: 0.5px solid var(--line);
+}
+.detail-images {
+  padding: 4rem 3.5rem; border-right: 0.5px solid var(--line);
+  background: var(--cream);
+  display: flex; flex-direction: column;
+}
+.detail-frame {
+  background: var(--paper-deep);
+  padding: 24px;
+  box-shadow: 0 8px 40px rgba(42,22,72,0.12);
+  position: relative;
+}
+.detail-frame::before {
+  content: ''; position: absolute; inset: 14px;
+  border: 0.5px solid rgba(42,22,72,0.3);
+  pointer-events: none;
+}
+.detail-main-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  background: var(--cream); position: relative;
+}
+.detail-main-img svg, .detail-main-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.detail-thumbs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.detail-thumb {
+  width: 72px; height: 54px; overflow: hidden; cursor: pointer;
+  opacity: 0.55; transition: opacity 0.2s, transform 0.2s;
+  flex-shrink: 0; background: var(--paper-deep); padding: 4px;
+}
+.detail-thumb.active, .detail-thumb:hover { opacity: 1; transform: translateY(-2px); }
+.detail-thumb svg, .detail-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.detail-info { padding: 4rem 3rem; }
+.detail-breadcrumb {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2rem;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: color 0.2s;
+}
+.detail-breadcrumb:hover { color: var(--ink); }
+.detail-artist-line {
+  font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.detail-artist-line::after { content: ''; flex: 1; max-width: 60px; height: 0.5px; background: var(--gold); opacity: 0.4; }
+.detail-title {
+  font-family: var(--display); font-size: 2.4rem; font-weight: 400;
+  color: var(--ink); line-height: 1.15; margin-bottom: 0.4rem;
+}
+.detail-year {
+  font-family: var(--serif); font-style: italic; color: var(--ink-muted);
+  font-size: 1.1rem; margin-bottom: 2.5rem;
+}
+.detail-inquiry-btn {
+  display: block; width: 100%; text-align: center;
+  font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0.3em;
+  text-transform: uppercase; background: var(--ink); color: var(--ivory);
+  border: none; padding: 1.1rem 2rem; cursor: pointer;
+  transition: background 0.2s; margin-bottom: 0.6rem;
+  text-decoration: none;
+}
+.detail-inquiry-btn:hover { background: var(--ink-light); }
+.detail-inquiry-btn.secondary {
+  background: transparent; color: var(--ink); border: 0.5px solid var(--ink);
+}
+.detail-inquiry-btn.secondary:hover { background: var(--ink); color: var(--ivory); }
+
+.detail-divider-ornament {
+  display: flex; align-items: center; gap: 1rem; margin: 2rem 0;
+  color: var(--gold);
+}
+.detail-divider-ornament::before, .detail-divider-ornament::after {
+  content: ''; flex: 1; height: 0.5px; background: var(--line);
+}
+.detail-divider-ornament span { font-family: var(--display); font-size: 1.2rem; }
+
+.detail-specs { margin: 1.5rem 0; }
+.spec-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.75rem 0; border-bottom: 0.5px solid var(--line-soft);
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-label {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.spec-value {
+  font-family: var(--serif); font-size: 0.98rem; color: var(--ink-light);
+  text-align: right; max-width: 60%;
+}
+
+.detail-desc {
+  font-family: var(--serif); font-size: 1rem; line-height: 1.9;
+  color: var(--ink-light); margin: 2rem 0;
+  font-style: italic;
+}
+.detail-desc::first-letter {
+  font-family: var(--display); font-size: 2.6rem; float: left;
+  line-height: 0.9; padding: 0.3rem 0.5rem 0 0; color: var(--gold);
+  font-style: normal;
+}
+
+.detail-guarantee {
+  background: var(--paper-warm); padding: 1.5rem 1.6rem;
+  border-left: 2px solid var(--gold); margin-top: 2rem;
+}
+.guarantee-title {
+  font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 1rem;
+}
+.guarantee-item {
+  display: flex; gap: 0.8rem; margin-bottom: 0.6rem;
+  font-family: var(--serif); font-size: 0.92rem; color: var(--ink-light);
+  line-height: 1.55;
+}
+.guarantee-item::before {
+  content: '✦'; color: var(--gold); font-size: 0.7rem; flex-shrink: 0;
+  margin-top: 5px;
+}
+
+/* ── MORE WORKS ── */
+.more-works { padding: 4rem 4rem; border-top: 0.5px solid var(--line); background: var(--cream); }
+.more-works-title {
+  font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 0.4rem;
+}
+.more-works-sub {
+  font-family: var(--serif); font-style: italic; color: var(--ink-muted);
+  font-size: 1rem; margin-bottom: 2rem;
+}
+.more-works-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+.more-thumb { cursor: pointer; }
+.more-thumb-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  background: var(--paper-deep); padding: 8px;
+  margin-bottom: 0.6rem; transition: transform 0.3s;
+}
+.more-thumb:hover .more-thumb-img { transform: translateY(-3px); }
+.more-thumb-img svg, .more-thumb-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.more-thumb-name {
+  font-family: var(--display); font-size: 0.95rem; color: var(--ink);
+  line-height: 1.3;
+}
+.more-thumb-year {
+  font-family: var(--serif); font-size: 0.8rem; font-style: italic;
+  color: var(--ink-muted); margin-top: 0.2rem;
+}
+
+/* ── BIOGRAPHY ── */
+.bio-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--line); }
+.bio-card {
+  padding: 5rem 4rem; position: relative;
+}
+.bio-card.left {
+  background: var(--paper-warm); border-right: 0.5px solid var(--line);
+}
+.bio-card.right { background: var(--ivory); }
+.bio-corner-num {
+  position: absolute; top: 2.5rem; right: 3rem;
+  font-family: var(--display); font-size: 1rem; color: var(--gold);
+  letter-spacing: 0.3em;
+}
+.bio-card.right .bio-corner-num { color: var(--vivid); right: auto; left: 3rem; }
+
+.bio-card-tag {
+  font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.bio-card-tag::after { content: ''; flex: 0 1 40px; height: 0.5px; background: var(--gold); }
+.bio-card-tag.vivid { color: var(--vivid); }
+.bio-card-tag.vivid::after { background: var(--vivid); }
+
+.bio-card-name {
+  font-family: var(--display); font-size: 2.6rem; font-weight: 400;
+  color: var(--ink); margin-bottom: 0.3rem; line-height: 1; letter-spacing: 0.01em;
+}
+.bio-card-name.vivid { color: var(--vivid); }
+.bio-years {
+  font-family: var(--serif); font-style: italic; color: var(--ink-muted);
+  font-size: 1rem; margin-bottom: 2.5rem;
+}
+.bio-years::before { content: '— '; color: var(--gold); }
+.bio-card.right .bio-years::before { color: var(--vivid); }
+
+.bio-text {
+  font-family: var(--serif); font-size: 1rem; line-height: 1.9;
+  color: var(--ink-light); margin-bottom: 1.2rem;
+}
+.bio-text.first::first-letter {
+  font-family: var(--display); font-size: 3.8rem; float: left;
+  line-height: 0.9; padding: 0.4rem 0.6rem 0 0; color: var(--gold);
+  font-style: normal;
+}
+.bio-card.right .bio-text.first::first-letter { color: var(--vivid); }
+
+.bio-quote {
+  font-family: var(--serif); font-style: italic; font-size: 1.2rem;
+  color: var(--ink); line-height: 1.6; margin: 2rem 0;
+  padding: 1.5rem 0; border-top: 0.5px solid var(--gold);
+  border-bottom: 0.5px solid var(--gold); position: relative;
+  text-align: center;
+}
+.bio-quote::before {
+  content: '"'; font-family: var(--display); position: absolute;
+  top: -0.3rem; left: 50%; transform: translateX(-50%);
+  background: var(--paper-warm); padding: 0 0.6rem;
+  font-size: 1.8rem; color: var(--gold);
+}
+.bio-card.right .bio-quote { border-color: var(--vivid); }
+.bio-card.right .bio-quote::before { color: var(--vivid); background: var(--ivory); }
+
+.bio-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2rem 0 2.5rem; }
+.bio-tag {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-muted);
+  border: 0.5px solid var(--line); padding: 0.45rem 0.9rem;
+}
+.bio-tag.vivid { color: var(--vivid); border-color: rgba(229,38,126,0.3); }
+
+.view-works-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ink); background: none;
+  border: none; padding: 0.5rem 0; cursor: pointer;
+  border-bottom: 0.5px solid var(--ink); transition: gap 0.2s;
+}
+.view-works-btn:hover { gap: 0.9rem; }
+
+.bio-legacy {
+  padding: 5rem 4rem; max-width: 760px; margin: 0 auto;
+  text-align: center;
+}
+.bio-legacy-title {
+  font-family: var(--display); font-size: 1.5rem; color: var(--ink);
+  margin: 1rem 0 1.5rem;
+}
+.bio-legacy-text {
+  font-family: var(--serif); font-style: italic; font-size: 1.15rem;
+  color: var(--ink-light); line-height: 1.9;
+}
+
+/* ── CONTACT ── */
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--line); }
+.contact-left {
+  padding: 5rem 4rem; border-right: 0.5px solid var(--line);
+  background: var(--paper-warm);
+}
+.contact-right { padding: 5rem 4rem; background: var(--ivory); }
+.contact-lead {
+  font-family: var(--display); font-size: 2.4rem; font-weight: 400;
+  line-height: 1.25; color: var(--ink); margin-bottom: 2.5rem;
+  letter-spacing: 0.01em;
+}
+.contact-lead em { font-style: italic; color: var(--ink-muted); font-family: var(--serif); }
+.contact-item { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 0.5px solid var(--line-soft); }
+.contact-item:last-child { border-bottom: none; }
+.contact-label {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+}
+.contact-value { font-family: var(--serif); font-size: 1.05rem; color: var(--ink-light); }
+.contact-value a { color: var(--ink-light); text-decoration: none; border-bottom: 0.5px dotted var(--gold); }
+
+.contact-form-title {
+  font-family: var(--display); font-size: 1.6rem; font-weight: 400;
+  color: var(--ink); margin-bottom: 2rem; letter-spacing: 0.01em;
+}
+.form-group { margin-bottom: 1.6rem; }
+.form-label {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-muted); display: block;
+  margin-bottom: 0.5rem;
+}
+.form-input, .form-textarea {
+  width: 100%; border: none; border-bottom: 1px solid rgba(42,22,72,0.22);
+  background: transparent; padding: 0.6rem 0;
+  font-family: var(--serif); font-size: 1rem; color: var(--ink);
+  outline: none; transition: border-color 0.25s;
+}
+.form-input:focus, .form-textarea:focus { border-bottom-color: var(--gold); }
+.form-textarea { resize: vertical; min-height: 90px; }
+.form-submit {
+  font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ivory); background: var(--ink);
+  border: none; padding: 1.1rem 2.8rem; cursor: pointer;
+  transition: background 0.2s; margin-top: 0.5rem;
+}
+.form-submit:hover { background: var(--ink-light); }
+
+/* ── HOME LEGACY / DELIVERY ── */
+.delivery-strip {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-bottom: 0.5px solid var(--line);
+  background: var(--cream);
+}
+.delivery-item {
+  padding: 2rem; border-right: 0.5px solid var(--line);
+  display: flex; flex-direction: column; gap: 0.6rem;
+  position: relative;
+}
+.delivery-item:last-child { border-right: none; }
+.delivery-icon {
+  font-family: var(--display); font-size: 1.4rem; color: var(--gold);
+}
+.delivery-text-label {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--ink);
+}
+.delivery-text-sub {
+  font-family: var(--serif); font-size: 0.92rem; color: var(--ink-muted);
+  font-style: italic; line-height: 1.55;
+}
+
+/* Featured intro */
+.featured-intro {
+  padding: 4rem 4rem 1rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 2rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 0.5px solid var(--line);
+  padding: 3rem 4rem 2rem;
+  background: var(--paper-warm);
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem; margin-bottom: 2rem;
+}
+.footer-brand-logo {
+  font-family: var(--display); font-size: 2rem; font-weight: 400;
+  letter-spacing: 0.1em; color: var(--ink); margin-bottom: 0.5rem;
+}
+.footer-brand-tag {
+  font-family: var(--serif); font-style: italic; color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+.footer-col-title {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 1rem;
+}
+.footer-col a, .footer-col p {
+  display: block; font-family: var(--serif); font-size: 0.95rem;
+  color: var(--ink-muted); text-decoration: none; cursor: pointer;
+  margin-bottom: 0.5rem; transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--ink); }
+.footer-bottom {
+  border-top: 0.5px solid var(--line-soft);
+  padding-top: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page.active .fadein { animation: fadeUp 0.7s ease forwards; }
+.page.active .fadein:nth-child(2) { animation-delay: 0.1s; }
+.page.active .fadein:nth-child(3) { animation-delay: 0.2s; }
+.page.active .fadein:nth-child(4) { animation-delay: 0.3s; }
+.page.active .fadein:nth-child(5) { animation-delay: 0.4s; }
+.page.active .fadein:nth-child(6) { animation-delay: 0.5s; }
+
+@media (max-width: 768px) {
+  nav { padding: 0 1.2rem; height: 64px; }
+  .nav-logo { font-size: 1.3rem; }
+  .nav-logo small { display: none; }
+  .nav-links { gap: 1.4rem; }
+  .hero, .bio-grid, .contact-layout, .detail-layout { grid-template-columns: 1fr; }
+  .hero::before { display: none; }
+  .hero-half { padding: 3rem 2rem; }
+  .hero-half.left { border-right: none; border-bottom: 0.5px solid var(--line); }
+  .bio-card.left { border-right: none; border-bottom: 0.5px solid var(--line); }
+  .contact-left { border-right: none; border-bottom: 0.5px solid var(--line); }
+  .detail-images { border-right: none; padding: 2rem 1.5rem; }
+  .detail-info { padding: 2.5rem 1.5rem; }
+  .home-stats, .delivery-strip { grid-template-columns: 1fr 1fr; }
+  .stat, .delivery-item { padding: 1.5rem; }
+  .stat:nth-child(2), .delivery-item:nth-child(2) { border-right: none; }
+  .gallery-grid { padding: 2rem 1.5rem; }
+  .gallery-toolbar, .section-header, .more-works, .featured-intro, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .gallery-toolbar { flex-direction: column; gap: 1rem; align-items: stretch; }
+  .filter-group { flex-wrap: wrap; }
+  .bio-card { padding: 3rem 1.5rem; }
+  .contact-left, .contact-right { padding: 3rem 1.5rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .year-badge { display: none; }
+  .topbar { gap: 1rem; padding: 0.5rem 1rem; flex-wrap: wrap; }
+  .topbar span:first-child, .topbar span:last-child { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>Ukrainian Artists · Lviv</span>
+  <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+  <span>Worldwide Delivery</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo" onclick="showPage('home')">Grabar <small>— artists</small></span>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('gallery')" id="nav-gallery">Paintings</a></li>
+    <li><a onclick="showPage('biography')" id="nav-biography">Artists</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════ HOME ═══════ -->
+<div id="page-home" class="page active">
+
+  <div class="hero">
+    <div class="hero-half left" onclick="showPage('biography')">
+      <div class="hero-bg-letter">Y</div>
+      <div class="year-badge">b. 1946</div>
+      <p class="hero-num fadein">N°  I</p>
+      <p class="hero-tag fadein">The Father · Classical Master</p>
+      <h2 class="hero-name fadein">Grabar Y.</h2>
+      <p class="hero-sub fadein">Seventy-nine years in paint</p>
+      <p class="hero-desc fadein">Portraits and landscapes in the tradition of the old masters. A lifetime of careful observation rendered in oil.</p>
+      <button class="hero-btn fadein" onclick="event.stopPropagation(); showPage('biography')">Discover His Work</button>
+    </div>
+    <div class="hero-half right" onclick="showPage('biography')">
+      <div class="hero-bg-letter">R</div>
+      <div class="year-badge">b. 1969</div>
+      <p class="hero-num fadein">N°  II</p>
+      <p class="hero-tag fadein">The Son · Abstractionist</p>
+      <h2 class="hero-name fadein">Grabar R.</h2>
+      <p class="hero-sub fadein">Fifty-six years of colour</p>
+      <p class="hero-desc fadein">Bold, chromatic, alive. Abstract canvases that pulse with the restless energy of a new generation.</p>
+      <button class="hero-btn fadein" onclick="event.stopPropagation(); showPage('gallery','R')">Discover His Work</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="home-stats">
+    <div class="stat fadein">
+      <div class="stat-num-wrap"><span class="stat-num">50</span><span class="stat-num-suffix">+ years</span></div>
+      <div class="stat-label">Of Practice</div>
+    </div>
+    <div class="stat fadein">
+      <div class="stat-num-wrap"><span class="stat-num">II</span></div>
+      <div class="stat-label">Generations</div>
+    </div>
+    <div class="stat fadein">
+      <div class="stat-num-wrap"><span class="stat-num">200</span><span class="stat-num-suffix">+ works</span></div>
+      <div class="stat-label">Original Paintings</div>
+    </div>
+    <div class="stat fadein">
+      <div class="stat-num-wrap"><span class="stat-num" style="font-size:2.2rem; font-style: italic;">Lviv</span></div>
+      <div class="stat-label">Ukraine</div>
+    </div>
+  </div>
+
+  <div class="delivery-strip">
+    <div class="delivery-item">
+      <span class="delivery-icon">✦</span>
+      <div class="delivery-text-label">Original Works</div>
+      <div class="delivery-text-sub">Certificate of authenticity with every painting</div>
+    </div>
+    <div class="delivery-item">
+      <span class="delivery-icon">❦</span>
+      <div class="delivery-text-label">Worldwide Delivery</div>
+      <div class="delivery-text-sub">Safe, insured shipping to any country</div>
+    </div>
+    <div class="delivery-item">
+      <span class="delivery-icon">✦</span>
+      <div class="delivery-text-label">Commission Works</div>
+      <div class="delivery-text-sub">Both artists accept private commissions</div>
+    </div>
+    <div class="delivery-item">
+      <span class="delivery-icon">❦</span>
+      <div class="delivery-text-label">Direct from the Artists</div>
+      <div class="delivery-text-sub">No gallery markup — purchase from the family</div>
+    </div>
+  </div>
+
+  <!-- Featured -->
+  <div class="featured-intro">
+    <div>
+      <p class="section-num fadein">N°  III</p>
+      <p class="section-tag fadein">Selected Works</p>
+      <h2 class="section-title fadein">Recent <em>Paintings</em></h2>
+    </div>
+    <button onclick="showPage('gallery')" style="font-family:var(--sans);font-size:0.6rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--ink);background:none;border:none;cursor:pointer;border-bottom:0.5px solid var(--ink);padding:0.6rem 0;">View The Collection →</button>
+  </div>
+  <div class="gallery-grid" id="home-preview"></div>
+
+  <div class="ornament">
+    <span class="ornament-mark">❦</span>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Grabar</div>
+        <p class="footer-brand-tag">Two generations of Ukrainian artists, working from Lviv since the 1960s.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Explore</p>
+        <a onclick="showPage('gallery')">All Paintings</a>
+        <a onclick="showPage('biography')">The Artists</a>
+        <a onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        <p>Lviv, Ukraine</p>
+        <p>By appointment</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Inquiries</p>
+        <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Grabar Artists · All Rights Reserved</span>
+      <span class="footer-copy">Made with care in Lviv</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ GALLERY ═══════ -->
+<div id="page-gallery" class="page">
+  <div class="section-header">
+    <p class="section-num fadein">N°  I</p>
+    <p class="section-tag fadein">Original Works</p>
+    <h1 class="section-title fadein">The <em>Collection</em></h1>
+  </div>
+
+  <div class="gallery-toolbar">
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="filterGallery('all', this)">All Works</button>
+      <button class="filter-btn" onclick="filterGallery('Y', this)">Grabar Y. · Classical</button>
+      <button class="filter-btn" onclick="filterGallery('R', this)">Grabar R. · Abstract</button>
+    </div>
+    <span class="gallery-count" id="gallery-count">twelve works</span>
+  </div>
+
+  <div class="gallery-grid" id="gallery-grid"></div>
+
+  <div class="ornament">
+    <span class="ornament-mark">❦</span>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Grabar</div>
+        <p class="footer-brand-tag">Two generations of Ukrainian artists, working from Lviv since the 1960s.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Explore</p>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('biography')">The Artists</a>
+        <a onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        <p>Lviv, Ukraine</p>
+        <p>By appointment</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Inquiries</p>
+        <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Grabar Artists · All Rights Reserved</span>
+      <span class="footer-copy">Made with care in Lviv</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ DETAIL ═══════ -->
+<div id="page-detail" class="page">
+  <div class="detail-layout">
+    <div class="detail-images">
+      <div class="detail-frame">
+        <div class="detail-main-img" id="detail-main-img"></div>
+      </div>
+      <div class="detail-thumbs" id="detail-thumbs"></div>
+    </div>
+    <div class="detail-info">
+      <span class="detail-breadcrumb" onclick="showPage('gallery')">← back to collection</span>
+      <p class="detail-artist-line" id="detail-artist-line"></p>
+      <h1 class="detail-title" id="detail-title"></h1>
+      <p class="detail-year" id="detail-year"></p>
+
+      <a id="detail-inquiry-btn" class="detail-inquiry-btn" href="">Inquire About This Work</a>
+      <button class="detail-inquiry-btn secondary" onclick="showPage('contact')">Contact the Artists</button>
+
+      <div class="detail-divider-ornament"><span>❦</span></div>
+
+      <div class="detail-specs" id="detail-specs"></div>
+
+      <p class="detail-desc" id="detail-desc"></p>
+
+      <div class="detail-guarantee">
+        <div class="guarantee-title">Our Guarantee</div>
+        <div class="guarantee-item">Original work with certificate of authenticity</div>
+        <div class="guarantee-item">Carefully packed and insured worldwide shipping</div>
+        <div class="guarantee-item">Direct purchase from the artists — no intermediaries</div>
+        <div class="guarantee-item">Commission works available on request</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="more-works">
+    <p class="more-works-title">More by this Artist</p>
+    <p class="more-works-sub">Other works in the same hand</p>
+    <div class="more-works-grid" id="more-works-grid"></div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Grabar</div>
+        <p class="footer-brand-tag">Two generations of Ukrainian artists.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Explore</p>
+        <a onclick="showPage('gallery')">All Paintings</a>
+        <a onclick="showPage('biography')">The Artists</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        <p>Lviv, Ukraine</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Inquiries</p>
+        <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Grabar Artists</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ BIOGRAPHY ═══════ -->
+<div id="page-biography" class="page">
+  <div class="section-header">
+    <p class="section-num fadein">N°  II</p>
+    <p class="section-tag fadein">The Artists</p>
+    <h1 class="section-title fadein">Father <em>&amp; Son</em></h1>
+  </div>
+
+  <div class="bio-grid">
+    <div class="bio-card left fadein">
+      <span class="bio-corner-num">N°  I</span>
+      <p class="bio-card-tag">The Father · Classical Master</p>
+      <h2 class="bio-card-name">Grabar Y.</h2>
+      <p class="bio-years">Born 1946, seventy-nine years in paint</p>
+
+      <p class="bio-text first">Grabar Y. came of age during a time when painting was still an act of devotion — slow, meditative, deeply attentive to the world. Trained in the classical tradition, he spent decades studying light as it falls across a human face, or lingers on the edge of a hillside at dusk.</p>
+
+      <div class="bio-quote">I do not paint what I see. I paint what remains when I close my eyes.</div>
+
+      <p class="bio-text">His portraits are distinguished by their psychological depth — each subject rendered not merely in likeness but in essence. His landscapes carry a sense of earned stillness, as if the earth itself has consented to be observed. Working primarily in oils, he favors the muted palette of the old masters: umbers, ochres, the cold white of winter sky.</p>
+
+      <p class="bio-text">Over five decades, he has exhibited across Ukraine and Eastern Europe, his work held in private collections from Lviv to Vienna. Now in his seventy-ninth year, he continues to paint every morning.</p>
+
+      <div class="bio-tags">
+        <span class="bio-tag">Oil on Canvas</span>
+        <span class="bio-tag">Portraiture</span>
+        <span class="bio-tag">Landscape</span>
+        <span class="bio-tag">Old Masters</span>
+      </div>
+      <button class="view-works-btn" onclick="showPage('gallery','Y')">View His Paintings →</button>
+    </div>
+
+    <div class="bio-card right fadein">
+      <span class="bio-corner-num">N°  II</span>
+      <p class="bio-card-tag vivid">The Son · Abstractionist</p>
+      <h2 class="bio-card-name vivid">Grabar R.</h2>
+      <p class="bio-years">Born 1969, fifty-six years of colour and form</p>
+
+      <p class="bio-text first">Growing up surrounded by his father's quiet canvases, Grabar R. absorbed the discipline of observation — then exploded it. Where his father found poetry in restraint, the son discovered it in rupture: vivid acid pigments, restless compositions, colour relationships that feel almost adversarial.</p>
+
+      <div class="bio-quote">My father taught me to see. I paint what happens when seeing becomes feeling.</div>
+
+      <p class="bio-text">Grabar R. works in a vocabulary that is unmistakably of his generation: large-format canvases layered with acrylics, oils, and mixed media. His abstract works operate on a physical register — they are meant to be felt as much as seen, their vibrating colour fields demanding something from the viewer in return.</p>
+
+      <p class="bio-text">He has shown extensively across Ukraine, Poland, and Germany. His bold, chromatic style has made him a distinctive voice in contemporary Ukrainian art.</p>
+
+      <div class="bio-tags">
+        <span class="bio-tag vivid">Acrylic</span>
+        <span class="bio-tag vivid">Abstract</span>
+        <span class="bio-tag vivid">Mixed Media</span>
+        <span class="bio-tag vivid">Large Format</span>
+      </div>
+      <button class="view-works-btn" style="color:var(--vivid);border-color:var(--vivid);" onclick="showPage('gallery','R')">View His Paintings →</button>
+    </div>
+  </div>
+
+  <div class="bio-legacy">
+    <div class="ornament" style="padding: 0;">
+      <span class="ornament-mark">❦</span>
+    </div>
+    <p class="section-tag" style="text-align:center;">A Family Legacy</p>
+    <h3 class="bio-legacy-title">Two Hands, One Story</h3>
+    <p class="bio-legacy-text">What makes the Grabar story singular is not merely the coincidence of talent across generations, but the dialogue between two radically different visions. Father and son rarely agree on what painting should do — and yet their works, hung side by side, reveal something neither could achieve alone.</p>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Grabar</div>
+        <p class="footer-brand-tag">Two generations of Ukrainian artists.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Explore</p>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('gallery')">All Paintings</a>
+        <a onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        <p>Lviv, Ukraine</p>
+        <p>By appointment</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Inquiries</p>
+        <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Grabar Artists</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ CONTACT ═══════ -->
+<div id="page-contact" class="page">
+  <div class="section-header">
+    <p class="section-num fadein">N°  III</p>
+    <p class="section-tag fadein">Get in Touch</p>
+    <h1 class="section-title fadein">Inquiries <em>&amp; Commissions</em></h1>
+  </div>
+
+  <div class="contact-layout">
+    <div class="contact-left fadein">
+      <p class="contact-lead">We welcome collectors, <em>galleries,</em> and all who love art.</p>
+
+      <div class="contact-item">
+        <div class="contact-label">Email</div>
+        <div class="contact-value"><a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Studio Location</div>
+        <div class="contact-value">Lviv, Ukraine</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Availability</div>
+        <div class="contact-value">By appointment, Tuesday – Saturday</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">Commissions</div>
+        <div class="contact-value">Both artists accept portrait and abstract commissions. Please send your idea by email.</div>
+      </div>
+    </div>
+
+    <div class="contact-right fadein">
+      <p class="contact-form-title">Send a Message</p>
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="form-input" id="cf-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="cf-email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input type="text" class="form-input" id="cf-subject" placeholder="Purchase, commission, exhibition…">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" id="cf-msg" placeholder="Tell us about your interest…"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitContact()">Send Message</button>
+      <p id="cf-confirm" style="font-family:var(--serif);font-style:italic;color:var(--gold);font-size:0.95rem;margin-top:1rem;display:none;">— Your email client should open shortly. Thank you.</p>
+    </div>
+  </div>
+
+  <div class="ornament">
+    <span class="ornament-mark">❦</span>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">Grabar</div>
+        <p class="footer-brand-tag">Two generations of Ukrainian artists.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Explore</p>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('gallery')">All Paintings</a>
+        <a onclick="showPage('biography')">The Artists</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Studio</p>
+        <p>Lviv, Ukraine</p>
+        <p>By appointment</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Inquiries</p>
+        <a href="mailto:pavlivm1@gmail.com">pavlivm1@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Grabar Artists</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ── PAINTING GENERATORS ──
+function classicalPortrait(seed) {
+  const bgs = ['#C8A882','#A0856A','#B8957A','#D4B896'];
+  const bg = bgs[seed % 4];
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="300" fill="${bg}"/>
+    <rect width="400" height="300" fill="rgba(20,15,10,0.18)"/>
+    <ellipse cx="200" cy="115" rx="50" ry="60" fill="#D4956A"/>
+    <ellipse cx="200" cy="82" rx="38" ry="40" fill="#C4855A"/>
+    <ellipse cx="200" cy="76" rx="30" ry="18" fill="#8B5A3A"/>
+    <rect x="158" y="158" width="84" height="95" rx="3" fill="#211810" opacity="0.92"/>
+    <ellipse cx="186" cy="112" rx="5" ry="6" fill="#2A1A10"/>
+    <ellipse cx="214" cy="112" rx="5" ry="6" fill="#2A1A10"/>
+    <path d="M186 128 Q200 136 214 128" stroke="#2A1A10" stroke-width="1.5" fill="none"/>
+  </svg>`;
+}
+function classicalLandscape(seed) {
+  const skies = ['#C8D4D8','#A8B8C8','#D8C8A0','#B8C4C0'];
+  const grounds = ['#4A5A30','#3A5028','#506040','#4A5838'];
+  const sky = skies[seed%4], g = grounds[seed%4];
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="300" fill="${sky}"/>
+    <ellipse cx="110" cy="90" rx="85" ry="52" fill="rgba(255,255,255,0.45)"/>
+    <ellipse cx="290" cy="75" rx="65" ry="40" fill="rgba(255,255,255,0.38)"/>
+    <rect x="0" y="172" width="400" height="128" fill="${g}"/>
+    <ellipse cx="75" cy="167" rx="36" ry="62" fill="#2A3820"/>
+    <ellipse cx="315" cy="162" rx="28" ry="52" fill="#2A3820"/>
+    <ellipse cx="200" cy="158" rx="55" ry="22" fill="#607840" opacity="0.65"/>
+    <rect x="172" y="198" width="16" height="32" fill="#3A2A18"/>
+    <rect x="160" y="188" width="40" height="16" fill="#8A4A28"/>
+  </svg>`;
+}
+function abstractVivid(seed) {
+  const palettes = [
+    ['#FF4E1A','#FFD600','#0047FF','#FF006E','#00D4FF'],
+    ['#FF1493','#00FF87','#FF6B00','#7B00FF','#FFE000'],
+    ['#FF0055','#00CFFF','#FFAA00','#8AFF00','#FF00AA'],
+    ['#FF3300','#AEFF00','#0099FF','#FF00CC','#FFE500']
+  ];
+  const pal = palettes[seed%4];
+  const rng = n => (seed*7919+n*1327)%1000/1000;
+  let s = '';
+  for(let i=0;i<7;i++){
+    const c=pal[i%pal.length],x=rng(i*3)*360,y=rng(i*3+1)*260,r=28+rng(i*3+2)*95;
+    s+=`<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*(0.4+rng(i*7)*0.8)}" fill="${c}" opacity="${0.55+rng(i*11)*0.45}" transform="rotate(${rng(i*13)*180},${x},${y})"/>`;
+  }
+  for(let i=0;i<3;i++){
+    const c=pal[(i+2)%pal.length],x1=rng(i*5)*400,y1=rng(i*5+1)*300,x2=rng(i*5+2)*400,y2=rng(i*5+3)*300;
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${3+rng(i*17)*10}" opacity="0.75"/>`;
+  }
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="300" fill="#F0EBE0"/>${s}</svg>`;
+}
+function abstractGeo(seed) {
+  const palettes = [
+    ['#FF2D55','#5AC8FA','#FFCC00','#4CD964','#FF9500'],
+    ['#BF5AF2','#FF6B35','#30D158','#0A84FF','#FFD60A'],
+    ['#FF375F','#64D2FF','#FFD60A','#30D158','#BF5AF2'],
+    ['#FF4DB8','#00E5FF','#AAFF00','#FF9100','#7A00FF']
+  ];
+  const pal = palettes[seed%4];
+  const rng = n => (seed*6271+n*1021)%1000/1000;
+  let s = '';
+  for(let i=0;i<9;i++){
+    const c=pal[i%pal.length],x=rng(i*4)*340,y=rng(i*4+1)*240,w=18+rng(i*4+2)*140,h=18+rng(i*4+3)*110;
+    s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}" opacity="${0.5+rng(i*9)*0.5}" transform="rotate(${(rng(i*13)-0.5)*40},${x+w/2},${y+h/2})"/>`;
+  }
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="300" fill="#0E0C0A"/>${s}</svg>`;
+}
+
+const PAINTINGS = [
+  { id:1, artist:'Y', title:'Portrait of an Old Man', year:'1988', medium:'Oil on canvas', size:'80 × 60 cm', style:'Realism, Portraiture', desc:'A study in solitude and dignity. The subject gazes past the viewer into some private distance, rendered in the warm tones of Rembrandt\'s school.', gen:s=>classicalPortrait(s) },
+  { id:2, artist:'Y', title:'Winter Landscape, Carpathians', year:'1994', medium:'Oil on canvas', size:'100 × 70 cm', style:'Classical Landscape', desc:'The cold light of a Ukrainian winter, the mountains receding into pale atmosphere. Painted en plein air over three days.', gen:s=>classicalLandscape(s+1) },
+  { id:3, artist:'Y', title:'Woman Reading', year:'2001', medium:'Oil on canvas', size:'75 × 55 cm', style:'Figurative, Interior', desc:'Interior light studies were a recurring obsession. A quiet figure absorbed in a book — a meditation on inner life.', gen:s=>classicalPortrait(s+2) },
+  { id:4, artist:'Y', title:'Evening, Lviv', year:'2008', medium:'Oil on canvas', size:'90 × 65 cm', style:'Urban Landscape', desc:'The old city at dusk, cobblestones glazed with autumn rain. Architecture of memory rendered in amber and shadow.', gen:s=>classicalLandscape(s+3) },
+  { id:5, artist:'Y', title:'Self-Portrait at Seventy', year:'2016', medium:'Oil on canvas', size:'60 × 50 cm', style:'Portraiture, Realism', desc:'An unflinching examination of age. The artist looks at himself with the same forensic attention given his subjects for fifty years.', gen:s=>classicalPortrait(s+4) },
+  { id:6, artist:'Y', title:'Spring Hills', year:'2019', medium:'Oil on canvas', size:'110 × 80 cm', style:'Classical Landscape', desc:'The awakening of the land in greens so precise they feel botanical. A late masterwork of quiet exuberance.', gen:s=>classicalLandscape(s+5) },
+  { id:7, artist:'R', title:'Acid Chrome No. 3', year:'2010', medium:'Acrylic on canvas', size:'150 × 120 cm', style:'Abstract Expressionism', desc:'The first of the Acid Chrome series. Volcanic pigments crash against each other in a composition that refuses resolution.', gen:s=>abstractVivid(s) },
+  { id:8, artist:'R', title:'Urban Fracture', year:'2013', medium:'Mixed media', size:'180 × 140 cm', style:'Abstract, Mixed Media', desc:'The city rendered as pure energy — its grids dissolved into fragments of hot colour and raking line.', gen:s=>abstractGeo(s+1) },
+  { id:9, artist:'R', title:'Neon Interior', year:'2015', medium:'Acrylic on canvas', size:'160 × 130 cm', style:'Abstract', desc:'An investigation of artificial light and its psychological weight. The canvas pulsates with restless colour.', gen:s=>abstractVivid(s+2) },
+  { id:10, artist:'R', title:'Signal / Noise', year:'2017', medium:'Mixed media', size:'200 × 160 cm', style:'Abstract, Geometric', desc:'Communication in the digital age — bold geometric interruptions across a field of vibrating colour.', gen:s=>abstractGeo(s+3) },
+  { id:11, artist:'R', title:'Chromatic Field IV', year:'2020', medium:'Acrylic on canvas', size:'170 × 140 cm', style:'Abstract', desc:'The most stripped-back work of the series. Colour doing everything, form doing nothing — and somehow, everything.', gen:s=>abstractVivid(s+4) },
+  { id:12, artist:'R', title:'After the Rain', year:'2023', medium:'Acrylic on canvas', size:'140 × 110 cm', style:'Abstract', desc:'A recent work, softer than his earlier canvases. The acid palette gives way to something closer to tenderness.', gen:s=>abstractGeo(s+5) },
+];
+
+const CONTACT_EMAIL = 'pavlivm1@gmail.com';
+
+function paintingCard(p, onclick) {
+  return `<div class="painting-card" onclick="${onclick}">
+    <div class="painting-frame">
+      <div class="painting-img-wrap">
+        ${p.gen(p.id)}
+        <span class="painting-artist-badge">Grabar ${p.artist}.</span>
+      </div>
+    </div>
+    <div class="painting-info">
+      <div class="painting-title-row">
+        <span class="painting-title">${p.title}</span>
+        <span class="painting-year">${p.year}</span>
+      </div>
+      <p class="painting-meta">${p.medium} · ${p.style}</p>
+      <span class="painting-inquire" onclick="event.stopPropagation();inquireAbout(${p.id})">Inquire →</span>
+    </div>
+  </div>`;
+}
+
+let currentFilter = 'all';
+function renderGallery(filter) {
+  const list = filter === 'all' ? PAINTINGS : PAINTINGS.filter(p => p.artist === filter);
+  document.getElementById('gallery-grid').innerHTML = list.map(p => paintingCard(p, `openDetail(${p.id})`)).join('');
+  const wordMap = {1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'seven',8:'eight',9:'nine',10:'ten',11:'eleven',12:'twelve'};
+  document.getElementById('gallery-count').textContent = `${wordMap[list.length] || list.length} works`;
+}
+function filterGallery(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery(f);
+}
+
+function renderHomePreview() {
+  const picks = [PAINTINGS[0], PAINTINGS[6], PAINTINGS[5], PAINTINGS[10]];
+  document.getElementById('home-preview').innerHTML = picks.map(p => paintingCard(p, `openDetail(${p.id})`)).join('');
+}
+
+function openDetail(id) {
+  const p = PAINTINGS.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('detail-main-img').innerHTML = p.gen(p.id);
+  document.getElementById('detail-artist-line').textContent = `Grabar ${p.artist}. — ${p.artist === 'Y' ? 'Classical Master' : 'Abstractionist'}`;
+  document.getElementById('detail-artist-line').style.color = p.artist === 'R' ? 'var(--vivid)' : 'var(--gold)';
+  document.getElementById('detail-title').textContent = `"${p.title}"`;
+  document.getElementById('detail-year').textContent = `Painted in ${p.year}`;
+
+  const subject = encodeURIComponent(`Inquiry: "${p.title}" by Grabar ${p.artist}. (${p.year})`);
+  const body = encodeURIComponent(`Hello,\n\nI am interested in the painting "${p.title}" (${p.year}, ${p.medium}, ${p.size}) by Grabar ${p.artist}.\n\nPlease provide more details.\n\nThank you.`);
+  document.getElementById('detail-inquiry-btn').href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+  document.getElementById('detail-specs').innerHTML = [
+    ['Artist', `Grabar ${p.artist}.`],
+    ['Year', p.year],
+    ['Medium', p.medium],
+    ['Size', p.size],
+    ['Style', p.style],
+    ['Availability', 'Available — inquire by email'],
+  ].map(([l,v]) => `<div class="spec-row"><span class="spec-label">${l}</span><span class="spec-value">${v}</span></div>`).join('');
+
+  document.getElementById('detail-desc').textContent = p.desc;
+
+  const related = PAINTINGS.filter(x => x.artist === p.artist && x.id !== p.id).slice(0, 4);
+  document.getElementById('detail-thumbs').innerHTML = `
+    <div class="detail-thumb active">${p.gen(p.id)}</div>
+    ${related.map(r => `<div class="detail-thumb" onclick="openDetail(${r.id})">${r.gen(r.id)}</div>`).join('')}
+  `;
+
+  const more = PAINTINGS.filter(x => x.artist === p.artist && x.id !== p.id).slice(0, 4);
+  document.getElementById('more-works-grid').innerHTML = more.map(m => `
+    <div class="more-thumb" onclick="openDetail(${m.id})">
+      <div class="more-thumb-img">${m.gen(m.id)}</div>
+      <p class="more-thumb-name">${m.title}</p>
+      <p class="more-thumb-year">${m.year}</p>
+    </div>
+  `).join('');
+
+  showPage('detail');
+}
+
+function inquireAbout(id) {
+  const p = PAINTINGS.find(x => x.id === id);
+  if (!p) return;
+  const subject = encodeURIComponent(`Inquiry: "${p.title}" by Grabar ${p.artist}. (${p.year})`);
+  const body = encodeURIComponent(`Hello,\n\nI am interested in the painting "${p.title}" (${p.year}, ${p.medium}, ${p.size}) by Grabar ${p.artist}.\n\nPlease provide more details.\n\nThank you.`);
+  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+}
+
+function submitContact() {
+  const name = document.getElementById('cf-name').value;
+  const email = document.getElementById('cf-email').value;
+  const subject = document.getElementById('cf-subject').value || 'Inquiry from Grabar website';
+  const msg = document.getElementById('cf-msg').value;
+  if (!name || !email) { alert('Please fill in your name and email.'); return; }
+  const sub = encodeURIComponent(subject);
+  const body = encodeURIComponent(`From: ${name} (${email})\n\n${msg}`);
+  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${sub}&body=${body}`;
+  document.getElementById('cf-confirm').style.display = 'block';
+}
+
+function showPage(name, filter) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (name === 'gallery') {
+    if (filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active');
+        if ((filter === 'all' && b.textContent.includes('All')) ||
+            (filter === 'Y' && b.textContent.includes('Y.')) ||
+            (filter === 'R' && b.textContent.includes('R.'))) b.classList.add('active');
+      });
+    }
+    renderGallery(currentFilter);
+  }
+}
+
+renderGallery('all');
+renderHomePreview();
+</script>
+</body>
+</html>
