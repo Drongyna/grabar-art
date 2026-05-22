@@ -60,6 +60,7 @@ body {
   gap: 2rem;
   padding: 0.55rem 2rem;
   position: relative;
+  z-index: 2;
 }
 .topbar::before, .topbar::after {
   content: '✦';
@@ -107,7 +108,7 @@ nav::after {
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; left: 0; }
 
 /* ── PAGES ── */
-.page { display: none; min-height: 80vh; }
+.page { display: none; min-height: 80vh; position: relative; z-index: 1; }
 .page.active { display: block; }
 
 /* ── ORNAMENTAL DIVIDER ── */
@@ -324,7 +325,6 @@ nav::after {
   overflow: hidden;
   position: relative;
   background: var(--cream);
-  <img src="images/painting1.jpg" />
 }
 .painting-img-wrap svg, .painting-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .painting-artist-badge {
@@ -690,6 +690,7 @@ footer {
   border-top: 0.5px solid var(--line);
   padding: 3rem 4rem 2rem;
   background: var(--paper-warm);
+  position: relative; z-index: 1;
 }
 .footer-grid {
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -763,9 +764,437 @@ footer {
   .topbar { gap: 1rem; padding: 0.5rem 1rem; flex-wrap: wrap; }
   .topbar span:first-child, .topbar span:last-child { display: none; }
 }
+/* ── ADMIN PANEL ── */
+.admin-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 2rem 4rem; border-bottom: 0.5px solid var(--line);
+  background: var(--cream); flex-wrap: wrap; gap: 1rem;
+}
+.admin-title { font-family: var(--display); font-size: 1.8rem; color: var(--ink); }
+.admin-subtitle { font-family: var(--serif); font-style: italic; color: var(--ink-muted); font-size: 0.95rem; }
+.admin-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.admin-btn {
+  font-family: var(--sans); font-size: 0.58rem; letter-spacing: 0.22em;
+  text-transform: uppercase; padding: 0.6rem 1.3rem; cursor: pointer;
+  transition: all 0.2s; border: 0.5px solid var(--line);
+  background: transparent; color: var(--ink);
+}
+.admin-btn:hover { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
+.admin-btn.primary { background: var(--gold); color: #fff; border-color: var(--gold); }
+.admin-btn.primary:hover { background: var(--gold-deep); }
+.admin-btn.danger { color: #c43; border-color: #c43; }
+.admin-btn.danger:hover { background: #c43; color: #fff; }
+
+.admin-layout { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--line); }
+.admin-form-col { padding: 3rem 4rem; border-right: 0.5px solid var(--line); }
+.admin-list-col { padding: 3rem 4rem; }
+
+.admin-form-title {
+  font-family: var(--display); font-size: 1.4rem; color: var(--ink);
+  margin-bottom: 2rem;
+}
+.admin-form-row { margin-bottom: 1.4rem; }
+.admin-form-row.half { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.admin-label {
+  font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-muted); display: block;
+  margin-bottom: 0.4rem;
+}
+.admin-input, .admin-select, .admin-textarea {
+  width: 100%; border: none; border-bottom: 1px solid rgba(42,22,72,0.22);
+  background: transparent; padding: 0.55rem 0;
+  font-family: var(--serif); font-size: 1rem; color: var(--ink);
+  outline: none; transition: border-color 0.2s;
+}
+.admin-input:focus, .admin-select:focus, .admin-textarea:focus { border-bottom-color: var(--gold); }
+.admin-textarea { resize: vertical; min-height: 80px; }
+.admin-select { cursor: pointer; -webkit-appearance: none; }
+
+.admin-upload-zone {
+  border: 2px dashed rgba(42,22,72,0.18);
+  padding: 2rem; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-top: 0.5rem; position: relative;
+}
+.admin-upload-zone:hover { border-color: var(--gold); background: rgba(93,46,200,0.03); }
+.admin-upload-zone.has-image { border-style: solid; border-color: var(--gold); }
+.admin-upload-text { font-family: var(--serif); font-style: italic; color: var(--ink-muted); }
+.admin-upload-text small {
+  display: block; margin-top: 0.5rem; font-family: var(--sans);
+  font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+  font-style: normal;
+}
+.admin-preview { max-width: 100%; max-height: 200px; display: none; margin: 1rem auto 0; }
+.admin-file-input {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+
+.admin-list-title {
+  font-family: var(--display); font-size: 1.4rem; color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+.admin-painting-list { display: flex; flex-direction: column; gap: 0.8rem; }
+.admin-painting-item {
+  display: flex; align-items: center; gap: 1rem; padding: 0.8rem;
+  border: 0.5px solid var(--line); background: var(--ivory);
+  transition: background 0.2s;
+}
+.admin-painting-item:hover { background: var(--cream); }
+.admin-item-thumb {
+  width: 72px; height: 54px; flex-shrink: 0; overflow: hidden;
+  background: var(--paper-deep);
+}
+.admin-item-thumb img, .admin-item-thumb svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.admin-item-info { flex: 1; min-width: 0; }
+.admin-item-title {
+  font-family: var(--display); font-size: 1rem; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.admin-item-meta {
+  font-family: var(--sans); font-size: 0.5rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.admin-item-badge {
+  font-family: var(--sans); font-size: 0.48rem; letter-spacing: 0.18em;
+  text-transform: uppercase; padding: 0.2rem 0.5rem;
+  background: rgba(93,46,200,0.08); color: var(--gold);
+}
+.admin-item-badge.custom { background: rgba(229,38,126,0.08); color: var(--vivid); }
+.admin-delete-btn {
+  font-family: var(--sans); font-size: 0.5rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: #c43; background: none;
+  border: 0.5px solid #c43; padding: 0.35rem 0.7rem;
+  cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+}
+.admin-delete-btn:hover { background: #c43; color: #fff; }
+
+.admin-msg {
+  display: none; padding: 1rem 1.5rem; margin: 0 4rem 1.5rem;
+  font-family: var(--serif); font-style: italic; font-size: 0.95rem;
+  border-left: 2px solid var(--gold); color: var(--ink-light);
+  background: rgba(93,46,200,0.04);
+}
+.admin-msg.show { display: block; }
+
+@media (max-width: 768px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-form-col { border-right: none; border-bottom: 0.5px solid var(--line); padding: 2rem 1.5rem; }
+  .admin-list-col { padding: 2rem 1.5rem; }
+  .admin-header { padding: 1.5rem; }
+  .admin-form-row.half { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+
+<!-- ACID PAINT SPLASHES — ROTATED + COLOR-MIXED -->
+<style>
+@keyframes splat1 {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  75% { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes splat2 {
+  0% { transform: scale(0); opacity: 0; }
+  45% { transform: scale(1.35); opacity: 1; }
+  70% { transform: scale(0.87); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes splat3 {
+  0% { transform: scale(0); opacity: 0; }
+  55% { transform: scale(1.2); opacity: 1; }
+  80% { transform: scale(0.93); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes line-draw {
+  0% { transform: scaleX(0); opacity: 0; }
+  60% { transform: scaleX(1.05); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+@keyframes dot-pop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.splash-wrap {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden; opacity: 0.23;
+}
+/* Outer wrapper holds rotation — inner holds animation */
+.p-rot { position: absolute; }
+.p-comp { width: 100%; height: 100%; opacity: 0; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0.34,1.56,0.64,1); }
+.p-circle { position: absolute; border-radius: 50%; }
+.p-line { position: absolute; transform-origin: left center; }
+.p-rect { position: absolute; }
+.p-dot { position: absolute; border-radius: 50%; opacity: 0; animation: dot-pop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+</style>
+
+<div class="splash-wrap">
+
+  <!-- 1: Circles+lines XL — 42deg, top-right, magenta+cyan+lime -->
+  <div class="p-rot" style="top:-60px;right:-50px;width:420px;height:360px;transform:rotate(42deg);">
+    <div class="p-comp" style="animation:splat1 0.7s 0.2s forwards;">
+      <div class="p-circle" style="bottom:20px;left:10px;width:260px;height:260px;background:#FF00AA;opacity:0.8;"></div>
+      <div class="p-circle" style="top:30px;left:50px;width:190px;height:140px;background:#00CED1;opacity:0.7;border-radius:55% 45% 50% 50%;"></div>
+      <div class="p-circle" style="top:80px;right:30px;width:100px;height:100px;background:#C5F02D;opacity:0.85;"></div>
+      <div class="p-line" style="top:60px;left:0;width:380px;height:5px;background:#FFD600;animation:line-draw 0.4s 0.6s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:180px;left:20px;width:340px;height:4px;background:#0066FF;transform:rotate(25deg);animation:line-draw 0.4s 0.75s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:120px;left:60px;width:280px;height:3px;background:#FF4E1A;transform:rotate(-35deg);animation:line-draw 0.35s 0.9s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:280px;right:380px;width:16px;height:16px;background:#FF00AA;animation-delay:1.0s;"></div>
+  <div class="p-dot" style="top:30px;right:440px;width:8px;height:8px;background:#FFD600;animation-delay:1.1s;"></div>
+
+  <!-- 2: Dark rects SMALL — -37deg, left, blue+pink+orange -->
+  <div class="p-rot" style="top:320px;left:-30px;width:180px;height:160px;transform:rotate(-37deg);">
+    <div class="p-comp" style="animation:splat2 0.7s 1.1s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+      <div class="p-rect" style="top:15px;left:10px;width:45px;height:55px;background:#FF6B00;opacity:0.8;transform:rotate(12deg);"></div>
+      <div class="p-rect" style="top:35px;left:65px;width:55px;height:40px;background:#FF00AA;opacity:0.75;transform:rotate(-8deg);"></div>
+      <div class="p-rect" style="top:75px;left:20px;width:50px;height:35px;background:#5AC8FA;opacity:0.7;transform:rotate(20deg);"></div>
+      <div class="p-rect" style="top:50px;right:10px;width:40px;height:60px;background:#C5F02D;opacity:0.75;transform:rotate(-15deg);"></div>
+      <div class="p-rect" style="bottom:10px;left:80px;width:45px;height:30px;background:#FFD600;opacity:0.8;transform:rotate(5deg);"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:280px;left:170px;width:10px;height:10px;background:#FF6B00;animation-delay:1.6s;"></div>
+
+  <!-- 3: Circles+lines MED — 50deg, center-right, orange+violet+green -->
+  <div class="p-rot" style="top:580px;right:8%;width:300px;height:250px;transform:rotate(50deg);">
+    <div class="p-comp" style="animation:splat3 0.7s 2.0s forwards;">
+      <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+      <div class="p-circle" style="bottom:20px;left:20px;width:140px;height:140px;background:#BF5AF2;opacity:0.8;"></div>
+      <div class="p-circle" style="top:15px;left:80px;width:100px;height:100px;background:#FF4E1A;opacity:0.65;"></div>
+      <div class="p-circle" style="top:50px;right:20px;width:90px;height:90px;background:#00E676;opacity:0.85;"></div>
+      <div class="p-line" style="top:70px;left:5px;width:270px;height:5px;background:#FF00AA;transform:rotate(22deg);animation:line-draw 0.4s 2.5s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:140px;left:30px;width:230px;height:4px;background:#FFD600;transform:rotate(-30deg);animation:line-draw 0.35s 2.65s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-circle" style="bottom:5px;right:50px;width:45px;height:45px;background:#0066FF;opacity:0.9;"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:530px;right:6%;width:12px;height:12px;background:#BF5AF2;animation-delay:2.8s;"></div>
+
+  <!-- 4: Dark rects LARGE TALL — -45deg, right, mixed rainbow -->
+  <div class="p-rot" style="top:950px;right:-20px;width:280px;height:340px;transform:rotate(-45deg);">
+    <div class="p-comp" style="animation:splat1 0.8s 2.8s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+      <div class="p-rect" style="top:20px;left:25px;width:100px;height:80px;background:#FFD600;opacity:0.8;transform:rotate(-10deg);"></div>
+      <div class="p-rect" style="top:80px;left:110px;width:80px;height:120px;background:#FF00AA;opacity:0.7;transform:rotate(15deg);"></div>
+      <div class="p-rect" style="top:180px;left:15px;width:120px;height:60px;background:#00CED1;opacity:0.75;transform:rotate(-6deg);"></div>
+      <div class="p-rect" style="top:140px;left:70px;width:60px;height:90px;background:#FF4E1A;opacity:0.8;transform:rotate(22deg);"></div>
+      <div class="p-rect" style="top:50px;right:15px;width:50px;height:70px;background:#C5F02D;opacity:0.7;transform:rotate(-18deg);"></div>
+      <div class="p-rect" style="bottom:30px;left:50px;width:90px;height:40px;background:#0066FF;opacity:0.75;transform:rotate(8deg);"></div>
+      <div class="p-line" style="top:120px;left:0;width:260px;height:3px;background:#FF375F;transform:rotate(40deg);animation:line-draw 0.3s 3.3s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:920px;right:280px;width:18px;height:18px;background:#FFD600;animation-delay:3.5s;"></div>
+
+  <!-- 5: Circles SMALL — 35deg, left, pink+blue+yellow -->
+  <div class="p-rot" style="top:1330px;left:10px;width:220px;height:180px;transform:rotate(35deg);">
+    <div class="p-comp" style="animation:splat2 0.7s 3.7s forwards;">
+      <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+      <div class="p-circle" style="top:25px;left:10px;width:100px;height:100px;background:#FF375F;opacity:0.8;"></div>
+      <div class="p-circle" style="top:20px;left:40px;width:75px;height:75px;background:#0066FF;opacity:0.7;"></div>
+      <div class="p-circle" style="bottom:10px;right:10px;width:85px;height:85px;background:#FFD600;opacity:0.85;"></div>
+      <div class="p-line" style="top:35px;left:0;width:200px;height:4px;background:#00E676;transform:rotate(-20deg);animation:line-draw 0.4s 4.1s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:100px;left:10px;width:170px;height:3px;background:#FF00AA;transform:rotate(32deg);animation:line-draw 0.35s 4.25s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-circle" style="top:55px;right:25px;width:40px;height:40px;background:#BF5AF2;opacity:0.9;"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:1490px;left:230px;width:10px;height:10px;background:#FF375F;animation-delay:4.4s;"></div>
+
+  <!-- 6: Dark rects WIDE — -53deg, center, all neon -->
+  <div class="p-rot" style="top:1620px;left:32%;width:380px;height:200px;transform:rotate(-53deg);">
+    <div class="p-comp" style="animation:splat3 0.7s 4.5s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+      <div class="p-rect" style="top:15px;left:15px;width:90px;height:100px;background:#00FF87;opacity:0.8;transform:rotate(14deg);"></div>
+      <div class="p-rect" style="top:30px;left:120px;width:110px;height:65px;background:#FF4E1A;opacity:0.7;transform:rotate(-12deg);"></div>
+      <div class="p-rect" style="top:100px;left:40px;width:100px;height:45px;background:#FF00AA;opacity:0.75;transform:rotate(7deg);"></div>
+      <div class="p-rect" style="top:60px;right:20px;width:65px;height:90px;background:#FFD600;opacity:0.8;transform:rotate(-20deg);"></div>
+      <div class="p-rect" style="bottom:15px;left:180px;width:75px;height:50px;background:#0066FF;opacity:0.7;transform:rotate(18deg);"></div>
+      <div class="p-rect" style="top:20px;right:60px;width:55px;height:70px;background:#FF375F;opacity:0.65;transform:rotate(-8deg);"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:1590px;left:30%;width:11px;height:11px;background:#00FF87;animation-delay:5.0s;"></div>
+
+  <!-- 7: Circles XXL — 32deg, right, hot mix -->
+  <div class="p-rot" style="top:1980px;right:-40px;width:460px;height:380px;transform:rotate(32deg);">
+    <div class="p-comp" style="animation:splat1 0.8s 5.2s forwards;">
+      <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+      <div class="p-circle" style="top:20px;left:20px;width:220px;height:220px;background:#0066FF;opacity:0.7;"></div>
+      <div class="p-circle" style="top:60px;left:100px;width:160px;height:120px;background:#FF00AA;opacity:0.65;border-radius:50%;"></div>
+      <div class="p-circle" style="bottom:20px;right:30px;width:120px;height:120px;background:#FFD600;opacity:0.8;"></div>
+      <div class="p-circle" style="top:100px;right:80px;width:80px;height:80px;background:#FF4E1A;opacity:0.85;"></div>
+      <div class="p-line" style="top:80px;left:0;width:420px;height:6px;background:#00E676;transform:rotate(28deg);animation:line-draw 0.4s 5.6s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:180px;left:30px;width:380px;height:5px;background:#BF5AF2;transform:rotate(-22deg);animation:line-draw 0.35s 5.75s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:130px;left:80px;width:300px;height:3px;background:#FF375F;transform:rotate(42deg);animation:line-draw 0.3s 5.9s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    </div>
+  </div>
+  <div class="p-dot" style="top:2280px;right:450px;width:16px;height:16px;background:#0066FF;animation-delay:6.0s;"></div>
+
+  <!-- 8: Dark rects TINY — 58deg, far left -->
+  <div class="p-rot" style="top:2380px;left:-10px;width:140px;height:120px;transform:rotate(58deg);">
+    <div class="p-comp" style="animation:splat2 0.6s 6.1s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:5px;"></div>
+      <div class="p-rect" style="top:10px;left:10px;width:40px;height:50px;background:#FF00AA;opacity:0.8;transform:rotate(-14deg);"></div>
+      <div class="p-rect" style="top:30px;left:55px;width:35px;height:55px;background:#FFD600;opacity:0.75;transform:rotate(10deg);"></div>
+      <div class="p-rect" style="bottom:10px;left:15px;width:55px;height:25px;background:#5AC8FA;opacity:0.8;transform:rotate(6deg);"></div>
+      <div class="p-rect" style="top:15px;right:8px;width:30px;height:45px;background:#00E676;opacity:0.75;transform:rotate(-8deg);"></div>
+    </div>
+  </div>
+
+  <!-- 9: Circles MED — -40deg, center-left, warm mix -->
+  <div class="p-rot" style="top:2680px;left:18%;width:260px;height:220px;transform:rotate(-40deg);">
+    <div class="p-comp" style="animation:splat3 0.7s 6.8s forwards;">
+      <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+      <div class="p-circle" style="bottom:10px;left:10px;width:130px;height:130px;background:#FF6B00;opacity:0.7;"></div>
+      <div class="p-circle" style="top:15px;right:15px;width:110px;height:110px;background:#00CED1;opacity:0.8;"></div>
+      <div class="p-circle" style="top:50px;left:45px;width:80px;height:80px;background:#FF375F;opacity:0.6;"></div>
+      <div class="p-line" style="top:50px;left:5px;width:240px;height:5px;background:#C5F02D;transform:rotate(-15deg);animation:line-draw 0.4s 7.2s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:130px;left:20px;width:200px;height:4px;background:#BF5AF2;transform:rotate(35deg);animation:line-draw 0.35s 7.35s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    </div>
+  </div>
+
+  <!-- 10: Dark rects SMALL — -48deg, right bottom -->
+  <div class="p-rot" style="top:2980px;right:60px;width:170px;height:150px;transform:rotate(-48deg);">
+    <div class="p-comp" style="animation:splat1 0.6s 7.4s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:5px;"></div>
+      <div class="p-rect" style="top:12px;left:10px;width:50px;height:65px;background:#FF4E1A;opacity:0.8;transform:rotate(10deg);"></div>
+      <div class="p-rect" style="top:35px;left:65px;width:55px;height:40px;background:#C5F02D;opacity:0.75;transform:rotate(-15deg);"></div>
+      <div class="p-rect" style="bottom:12px;left:30px;width:65px;height:30px;background:#0066FF;opacity:0.8;transform:rotate(5deg);"></div>
+      <div class="p-rect" style="top:20px;right:10px;width:35px;height:55px;background:#FF00AA;opacity:0.7;transform:rotate(-8deg);"></div>
+    </div>
+  </div>
+
+  <!-- 11: Circles LARGE — 46deg, upper center -->
+  <div class="p-rot" style="top:160px;left:22%;width:350px;height:280px;transform:rotate(46deg);">
+    <div class="p-comp" style="animation:splat2 0.7s 4.8s forwards;">
+      <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+      <div class="p-circle" style="top:20px;left:20px;width:180px;height:180px;background:#FFD600;opacity:0.7;"></div>
+      <div class="p-circle" style="top:40px;left:70px;width:120px;height:90px;background:#FF375F;opacity:0.65;"></div>
+      <div class="p-circle" style="bottom:15px;right:15px;width:100px;height:100px;background:#0066FF;opacity:0.8;"></div>
+      <div class="p-circle" style="top:80px;right:60px;width:70px;height:70px;background:#00FF87;opacity:0.85;"></div>
+      <div class="p-line" style="top:60px;left:0;width:320px;height:5px;background:#FF00AA;transform:rotate(-25deg);animation:line-draw 0.4s 5.2s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+      <div class="p-line" style="top:160px;left:20px;width:280px;height:4px;background:#FF4E1A;transform:rotate(30deg);animation:line-draw 0.35s 5.35s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    </div>
+  </div>
+
+  <!-- 12: Dark rects MED — 33deg, bottom left -->
+  <div class="p-rot" style="top:3230px;left:5%;width:250px;height:210px;transform:rotate(33deg);">
+    <div class="p-comp" style="animation:splat3 0.6s 7.8s forwards;">
+      <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+      <div class="p-rect" style="top:15px;left:15px;width:70px;height:90px;background:#FF00AA;opacity:0.8;transform:rotate(-12deg);"></div>
+      <div class="p-rect" style="top:40px;left:95px;width:85px;height:55px;background:#00E676;opacity:0.75;transform:rotate(16deg);"></div>
+      <div class="p-rect" style="bottom:20px;left:30px;width:90px;height:45px;background:#FF4E1A;opacity:0.7;transform:rotate(-5deg);"></div>
+      <div class="p-rect" style="top:30px;right:15px;width:50px;height:80px;background:#5AC8FA;opacity:0.8;transform:rotate(20deg);"></div>
+      <div class="p-rect" style="bottom:15px;right:25px;width:60px;height:50px;background:#FFD600;opacity:0.65;transform:rotate(-18deg);"></div>
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="p-dot" style="top:100px;left:18%;width:7px;height:7px;background:#FF00AA;animation-delay:0.5s;"></div>
+  <div class="p-dot" style="top:220px;left:72%;width:5px;height:5px;background:#FFD600;animation-delay:1.0s;"></div>
+  <div class="p-dot" style="top:500px;left:10%;width:8px;height:8px;background:#C5F02D;animation-delay:1.5s;"></div>
+  <div class="p-dot" style="top:720px;right:22%;width:6px;height:6px;background:#0066FF;animation-delay:2.0s;"></div>
+  <div class="p-dot" style="top:930px;left:38%;width:9px;height:9px;background:#FF4E1A;animation-delay:2.5s;"></div>
+  <div class="p-dot" style="top:1220px;right:16%;width:5px;height:5px;background:#00E676;animation-delay:3.0s;"></div>
+  <div class="p-dot" style="top:1520px;left:62%;width:7px;height:7px;background:#BF5AF2;animation-delay:3.5s;"></div>
+  <div class="p-dot" style="top:1820px;left:6%;width:6px;height:6px;background:#FF375F;animation-delay:4.0s;"></div>
+  <div class="p-dot" style="top:1920px;right:32%;width:8px;height:8px;background:#00CED1;animation-delay:4.5s;"></div>
+  <div class="p-dot" style="top:2220px;left:28%;width:5px;height:5px;background:#FF00AA;animation-delay:5.0s;"></div>
+  <div class="p-dot" style="top:2520px;right:42%;width:7px;height:7px;background:#FFD600;animation-delay:5.5s;"></div>
+  <div class="p-dot" style="top:2820px;left:52%;width:6px;height:6px;background:#00FF87;animation-delay:6.0s;"></div>
+  <div class="p-dot" style="top:3120px;left:42%;width:8px;height:8px;background:#FF6B00;animation-delay:6.5s;"></div>
+  <div class="p-dot" style="top:3320px;right:18%;width:5px;height:5px;background:#0066FF;animation-delay:7.0s;"></div>
+  <div class="p-dot" style="top:820px;left:58%;width:4px;height:4px;background:#FF00AA;animation-delay:2.3s;"></div>
+  <div class="p-dot" style="top:1120px;left:4%;width:6px;height:6px;background:#C5F02D;animation-delay:3.2s;"></div>
+  <div class="p-dot" style="top:1680px;right:6%;width:5px;height:5px;background:#FF4E1A;animation-delay:4.3s;"></div>
+  <div class="p-dot" style="top:2120px;right:58%;width:4px;height:4px;background:#00E676;animation-delay:5.3s;"></div>
+</div>
+
+  <!-- COMP 10: Dark rects SMALL — rotated -60deg, right bottom, 170px -->
+  <div class="p-comp" style="top:2950px;right:60px;width:170px;height:150px;transform:rotate(-60deg);animation:splat1 0.6s 7.4s forwards;">
+    <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:5px;"></div>
+    <div class="p-rect" style="top:12px;left:10px;width:50px;height:65px;background:#5AC8FA;opacity:0.8;transform:rotate(10deg);"></div>
+    <div class="p-rect" style="top:35px;left:65px;width:55px;height:40px;background:#FF375F;opacity:0.75;transform:rotate(-15deg);"></div>
+    <div class="p-rect" style="bottom:12px;left:30px;width:65px;height:30px;background:#C5F02D;opacity:0.8;transform:rotate(5deg);"></div>
+    <div class="p-rect" style="top:20px;right:10px;width:35px;height:55px;background:#FF9500;opacity:0.7;transform:rotate(-8deg);"></div>
+  </div>
+
+  <!-- COMP 11: EXTRA circles — rotated 47deg, far right mid, 350px -->
+  <div class="p-comp" style="top:160px;left:25%;width:350px;height:280px;transform:rotate(47deg);animation:splat2 0.7s 4.8s forwards;">
+    <div style="position:absolute;inset:0;background:#F0EBE0;border-radius:6px;"></div>
+    <div class="p-circle" style="top:20px;left:20px;width:180px;height:180px;background:#FF6B00;opacity:0.7;"></div>
+    <div class="p-circle" style="top:40px;left:70px;width:120px;height:90px;background:#FFD600;opacity:0.65;"></div>
+    <div class="p-circle" style="bottom:15px;right:15px;width:100px;height:100px;background:#FF00AA;opacity:0.8;"></div>
+    <div class="p-circle" style="top:80px;right:60px;width:70px;height:70px;background:#C5F02D;opacity:0.85;"></div>
+    <div class="p-line" style="top:60px;left:0;width:320px;height:5px;background:#0066FF;transform:rotate(-25deg);animation:line-draw 0.4s 5.2s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+    <div class="p-line" style="top:160px;left:20px;width:280px;height:4px;background:#FF00AA;transform:rotate(30deg);animation:line-draw 0.35s 5.35s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+  </div>
+
+  <!-- COMP 12: Dark rects MEDIUM — rotated 30deg, bottom left, 250px -->
+  <div class="p-comp" style="top:3200px;left:5%;width:250px;height:210px;transform:rotate(30deg);animation:splat3 0.6s 7.8s forwards;">
+    <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+    <div class="p-rect" style="top:15px;left:15px;width:70px;height:90px;background:#64D2FF;opacity:0.8;transform:rotate(-12deg);"></div>
+    <div class="p-rect" style="top:40px;left:95px;width:85px;height:55px;background:#FF375F;opacity:0.75;transform:rotate(16deg);"></div>
+    <div class="p-rect" style="bottom:20px;left:30px;width:90px;height:45px;background:#FFD60A;opacity:0.7;transform:rotate(-5deg);"></div>
+    <div class="p-rect" style="top:30px;right:15px;width:50px;height:80px;background:#30D158;opacity:0.8;transform:rotate(20deg);"></div>
+    <div class="p-rect" style="bottom:15px;right:25px;width:60px;height:50px;background:#BF5AF2;opacity:0.65;transform:rotate(-18deg);"></div>
+  </div>
+
+  <!-- Scattered dots -->
+  <div class="p-dot" style="top:100px;left:20%;width:7px;height:7px;background:#FF4E1A;animation-delay:0.5s;"></div>
+  <div class="p-dot" style="top:200px;left:70%;width:5px;height:5px;background:#0066FF;animation-delay:1.0s;"></div>
+  <div class="p-dot" style="top:500px;left:12%;width:8px;height:8px;background:#C5F02D;animation-delay:1.5s;"></div>
+  <div class="p-dot" style="top:700px;right:25%;width:6px;height:6px;background:#FF00AA;animation-delay:2.0s;"></div>
+  <div class="p-dot" style="top:900px;left:35%;width:9px;height:9px;background:#FFD600;animation-delay:2.5s;"></div>
+  <div class="p-dot" style="top:1200px;right:18%;width:5px;height:5px;background:#00E676;animation-delay:3.0s;"></div>
+  <div class="p-dot" style="top:1500px;left:60%;width:7px;height:7px;background:#FF4E1A;animation-delay:3.5s;"></div>
+  <div class="p-dot" style="top:1800px;left:8%;width:6px;height:6px;background:#0066FF;animation-delay:4.0s;"></div>
+  <div class="p-dot" style="top:1900px;right:35%;width:8px;height:8px;background:#BF5AF2;animation-delay:4.5s;"></div>
+  <div class="p-dot" style="top:2200px;left:25%;width:5px;height:5px;background:#FF2D55;animation-delay:5.0s;"></div>
+  <div class="p-dot" style="top:2500px;right:45%;width:7px;height:7px;background:#00CED1;animation-delay:5.5s;"></div>
+  <div class="p-dot" style="top:2800px;left:55%;width:6px;height:6px;background:#FFD600;animation-delay:6.0s;"></div>
+  <div class="p-dot" style="top:3100px;left:40%;width:8px;height:8px;background:#FF00AA;animation-delay:6.5s;"></div>
+  <div class="p-dot" style="top:3300px;right:20%;width:5px;height:5px;background:#00E676;animation-delay:7.0s;"></div>
+  <div class="p-dot" style="top:800px;left:55%;width:4px;height:4px;background:#FF9500;animation-delay:2.3s;"></div>
+  <div class="p-dot" style="top:1100px;left:5%;width:6px;height:6px;background:#5AC8FA;animation-delay:3.2s;"></div>
+  <div class="p-dot" style="top:1650px;right:8%;width:5px;height:5px;background:#FF375F;animation-delay:4.3s;"></div>
+  <div class="p-dot" style="top:2100px;right:55%;width:4px;height:4px;background:#C5F02D;animation-delay:5.3s;"></div>
+</div>
+
+    <div class="p-line" style="top:150px;left:30px;width:230px;height:4px;background:#00E676;transform:rotate(35deg);animation:line-draw 0.35s 7.35s forwards;opacity:0;animation-fill-mode:forwards;"></div>
+  </div>
+
+  <!-- COMP 10: Small dark rects — right bottom -->
+  <div class="p-comp" style="top:3050px;right:80px;width:200px;height:180px;animation:splat1 0.6s 7.4s forwards;">
+    <div style="position:absolute;inset:0;background:#0E0C0A;border-radius:6px;"></div>
+    <div class="p-rect" style="top:20px;left:15px;width:60px;height:80px;background:#5AC8FA;opacity:0.8;transform:rotate(10deg);"></div>
+    <div class="p-rect" style="top:50px;left:80px;width:70px;height:50px;background:#FF375F;opacity:0.75;transform:rotate(-15deg);"></div>
+    <div class="p-rect" style="bottom:20px;left:40px;width:80px;height:40px;background:#C5F02D;opacity:0.8;transform:rotate(5deg);"></div>
+    <div class="p-rect" style="top:30px;right:15px;width:40px;height:70px;background:#FF9500;opacity:0.7;transform:rotate(-8deg);"></div>
+  </div>
+
+  <!-- Scattered tiny dots — painting spray -->
+  <div class="p-dot" style="top:100px;left:20%;width:7px;height:7px;background:#FF4E1A;animation-delay:0.5s;"></div>
+  <div class="p-dot" style="top:200px;left:70%;width:5px;height:5px;background:#0066FF;animation-delay:1.0s;"></div>
+  <div class="p-dot" style="top:500px;left:12%;width:8px;height:8px;background:#C5F02D;animation-delay:1.5s;"></div>
+  <div class="p-dot" style="top:700px;right:25%;width:6px;height:6px;background:#FF00AA;animation-delay:2.0s;"></div>
+  <div class="p-dot" style="top:900px;left:35%;width:9px;height:9px;background:#FFD600;animation-delay:2.5s;"></div>
+  <div class="p-dot" style="top:1200px;right:18%;width:5px;height:5px;background:#00E676;animation-delay:3.0s;"></div>
+  <div class="p-dot" style="top:1500px;left:60%;width:7px;height:7px;background:#FF4E1A;animation-delay:3.5s;"></div>
+  <div class="p-dot" style="top:1800px;left:8%;width:6px;height:6px;background:#0066FF;animation-delay:4.0s;"></div>
+  <div class="p-dot" style="top:1900px;right:35%;width:8px;height:8px;background:#BF5AF2;animation-delay:4.5s;"></div>
+  <div class="p-dot" style="top:2200px;left:25%;width:5px;height:5px;background:#FF2D55;animation-delay:5.0s;"></div>
+  <div class="p-dot" style="top:2500px;right:45%;width:7px;height:7px;background:#00CED1;animation-delay:5.5s;"></div>
+  <div class="p-dot" style="top:2650px;left:15%;width:6px;height:6px;background:#FFD600;animation-delay:6.0s;"></div>
+  <div class="p-dot" style="top:2900px;left:55%;width:8px;height:8px;background:#FF00AA;animation-delay:6.5s;"></div>
+  <div class="p-dot" style="top:3100px;left:30%;width:5px;height:5px;background:#00E676;animation-delay:7.0s;"></div>
+  <div class="p-dot" style="top:800px;left:55%;width:4px;height:4px;background:#FF9500;animation-delay:2.3s;"></div>
+  <div class="p-dot" style="top:1100px;left:5%;width:6px;height:6px;background:#5AC8FA;animation-delay:3.2s;"></div>
+  <div class="p-dot" style="top:1650px;right:8%;width:5px;height:5px;background:#FF375F;animation-delay:4.3s;"></div>
+  <div class="p-dot" style="top:2100px;right:55%;width:4px;height:4px;background:#C5F02D;animation-delay:5.3s;"></div>
+</div>
+
 
 <!-- TOP BAR -->
 <div class="topbar">
