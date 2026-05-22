@@ -1,2 +1,5 @@
 # grabar-art
-Grabar Y. came of age when painting was an act of devotion - slow, meditative, attentive to light and landscape. Grabar R. works in a contemporary visual language, using large-format abstract canvases layered with acrylics, oils, and mixed media to create immersive, physical experiences.
+# grabar-art
+
+A living digital gallery of Ukrainian painting.
+The project brings together works by Ukrainian artists across generations and styles — from classical landscapes to contemporary abstraction. Conceived as an evolving online exhibition space, the gallery focuses on atmosphere, materiality, and emotional presence through painting.
